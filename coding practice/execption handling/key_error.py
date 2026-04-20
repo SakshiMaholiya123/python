@@ -5,7 +5,3 @@ try:
   print(dict[key])
 except KeyError:
   print("Key not found in the dictionary")
-
-  
-
-
