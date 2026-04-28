@@ -1,6 +1,12 @@
+# import re
+# text = "My number is 123456789"
+
+# result = re.search(r"\d+", text)
+
+# print(result.group())
+
 import re
-text = "My number is 123456789"
+str=str(input("enter text"))
 
-result = re.search(r"\d+", text)
-
-print(result.group())
+res=re.search(r"\d+",str)    #GIVETHE first occurence of the matching string
+print(f"result is {res.group()}")
