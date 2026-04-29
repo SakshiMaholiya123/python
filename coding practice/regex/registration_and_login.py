@@ -1,54 +1,80 @@
-# Part 1: Registration
-# Write a program that takes the following input from the user:
-# Student name
-# Student address
-# Student ID
-# Password
-# The program must validate each field using regex before registration is successful.
-
-# Registration rules
-# Student name: Must contain only letters and spaces, and length should be 3 to 30 characters.
-# Address: Must contain letters, numbers, spaces, commas, periods, hyphens, and slashes, and length should be 10 to 100 characters.
-# Student ID: Must start with STU followed by exactly 4 digits, for example STU1024.
-# Password: Must be 8 to 16 characters long and contain at least one uppercase letter, one lowercase letter, one digit, one special character, and no spaces.
-# If all fields are valid, store the student ID and password in variables and print:
-# Registration successful
-# Otherwise, print the correct error message for the invalid field.
 import re
-student_name=(input("Enter your name "))
-student_address=input("Enter address ")
-student_id=input("enter your id ")
-password=input("enter password ")
+import json
+import os
 
-name_pattern=r"^[a-zA-Z ]{3,30}$"
-address_match=r"^[0-9a-zA-Z, -/.]{10,100}$"
-studentid_match=r"^STU\d{4}"
-password_match=r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$"
+class Student:
+    filename = "students.json"
 
-if  not re.match(name_pattern,student_name):
-    print("invalid name")
+    def __init__(self):
+        self.name = None
+        self.address = None
+        self.sid = None
+        self.password = None
 
-elif  not re.match(studentid_match,student_id):
-    print("invalid id")
+    def register(self):
+        name = input("Enter name: ")
+        if not re.match(r"^[a-zA-Z ]{3,30}$", name):
+            print("Invalid Name")
+            return False
+        self.name = name
 
-elif  not re.match(address_match,student_address):
-    print("invalid adress")
+        address = input("Enter address: ")
+        if not re.match(r"^[0-9a-zA-Z,./\- ]{10,100}$", address):
+            print("Invalid Address")
+            return False
+        self.address = address
 
-elif  not re.match(password_match,password):
-    print("invalid password")
+        sid = input("Enter ID: ")
+        if not re.match(r"^STU\d{4}$", sid):
+            print("Invalid ID")
+            return False
+        self.sid = sid
 
-else:
-    id=student_id
-    password_stored=password
-    print(f"Registration successful")
+        password = input("Enter password: ")
+        if not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[^\s]{8,16}$", password):
+            print("Invalid Password")
+            return False
+        self.password = password
 
+        data = {}
+        if os.path.exists(self.filename):
+            with open(self.filename, "r") as f:
+                try:
+                    data = json.load(f)
+                except:
+                    data = {}
 
-print("for login ")
-id=input("enter your id ")
-check_password=input("enter the password ")
+        if self.sid in data:
+            print("User already exists")
+            return False
 
-if   re.match(id,student_id) and re.match(check_password,password):
-    print('Login Successful')
+        data[self.sid] = self.password
 
-else:
-    print("Invalid student ID or password")
+        with open(self.filename, "w") as f:
+            json.dump(data, f)
+
+        print("registration Successful")
+        return True
+
+    def login(self):
+        if not os.path.exists(self.filename):
+            print("no users found")
+            return
+
+        sid = input("enter ID: ")
+        password = input("enter password: ")
+
+        with open(self.filename, "r") as f:
+            data = json.load(f)
+
+        if sid in data and data[sid] == password:
+            print("login successful")
+        else:
+            print("invalid ID or password")
+
+user = Student()
+success = user.register()
+
+if success:
+    print("login")
+    user.login()
