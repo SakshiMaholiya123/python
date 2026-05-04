@@ -1,0 +1,4 @@
+[pytest]
+markers =
+    smoke: Quick tests to verify basic functionality
+    regression: Comprehensive tests to ensure no new bugs were introduced
