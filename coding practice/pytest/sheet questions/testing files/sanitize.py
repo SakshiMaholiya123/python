@@ -1,7 +1,6 @@
 import re
 
 class InputSanitizationError(Exception):
-    """Custom exception raised when sanitization results in an empty string."""
     pass
 
 def sanitize_input(text):

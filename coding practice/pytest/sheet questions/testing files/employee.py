@@ -8,6 +8,6 @@ def validate_employee(emp_id, email):
         raise ValueError(f"Invalid Employee ID format{ emp_id}")
 
     if not re.match(email_pattern, email):
-        raise ValueError(f"Invalid Email format{email}")
+        raise ValueError(f"Invalid email format{email}")
 
     return True
