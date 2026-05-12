@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./coding practice/pytest/sheet questions/logic",
+        "./coding practice/oops/inheritence"
+    ]
+}
